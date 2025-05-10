@@ -58,8 +58,12 @@ namespace AmazonShoppingAutomation
                 var productTitle = await productTitleElement?.InnerTextAsync();
                 Console.WriteLine($"Product page loaded: {productTitle?.Trim()}");
 
-                // Now wait for Buy Now button
-                Console.WriteLine("Checking for 'Buy Now' button...");
+                // Step 5: Adjust quantity to 3
+                Console.WriteLine("Step 5: Adjusting quantity to 3...");
+                await IncreaseQuantity(page);
+
+                // Step 6: Click "Buy Now" button
+                Console.WriteLine("Step 6: Checking for 'Buy Now' button...");
                 var buyNowButton = await page.QuerySelectorAsync("#buy-now-button");
 
                 if (buyNowButton != null)
@@ -72,19 +76,18 @@ namespace AmazonShoppingAutomation
                     Console.WriteLine("Buy Now button not found. Product might not be available for direct purchase.");
                 }
 
-                // Step 5: Enter mobile number on sign-in page
-                Console.WriteLine("Step 5: Entering mobile number");
-                Console.WriteLine("Step 5: Entering mobile number and waiting for OTP");
+                // Step 7: Enter mobile number on sign-in page
+                Console.WriteLine("Step 7: Entering mobile number and waiting for OTP");
                 await page.WaitForSelectorAsync("#ap_email_login", new PageWaitForSelectorOptions { Timeout = 30000 });
                 await page.FillAsync("#ap_email_login", "+91 9699114832");
                 await page.PressAsync("#ap_email_login", "Enter");
 
-                // Step 6: Wait for password page
-                Console.WriteLine("Step 6: Waiting for password or OTP input page");
+                // Step 8: Wait for password page
+                Console.WriteLine("Step 8: Waiting for password or OTP input page");
                 await page.WaitForSelectorAsync("#ap_password, #auth-pv-enter-code", new PageWaitForSelectorOptions { Timeout = 30000 });
                 Console.WriteLine("Reached sign-in/verification page.");
 
-                Console.WriteLine("Automation complete! Stopped at sign-in.");
+                Console.WriteLine("Automation completed! Stopped at sign-in.");
                 Console.WriteLine("Press any key to exit...");
                 Console.ReadKey();
             }
@@ -139,10 +142,8 @@ namespace AmazonShoppingAutomation
         {
             try
             {
-                // Start listening for popup (new tab)
                 var popupTask = page.WaitForPopupAsync();
 
-                // Click product link
                 var boatProductContainer = await page.QuerySelectorAsync("//div[contains(@data-component-type, 's-search-result')]//span[contains(text(), 'boAt') or contains(text(), 'Boat')]/ancestor::div[contains(@data-component-type, 's-search-result')]");
                 if (boatProductContainer != null)
                 {
@@ -155,7 +156,6 @@ namespace AmazonShoppingAutomation
                 }
                 else
                 {
-                    // fallback if no boAt product found
                     var fallbackLink = await page.QuerySelectorAsync("[data-component-type='s-search-result'] h2 a");
                     if (fallbackLink != null)
                     {
@@ -164,7 +164,6 @@ namespace AmazonShoppingAutomation
                     }
                 }
 
-                // Wait for new tab to open
                 var newTabPage = await popupTask;
                 await newTabPage.WaitForLoadStateAsync(LoadState.DOMContentLoaded);
 
@@ -175,7 +174,30 @@ namespace AmazonShoppingAutomation
             catch (Exception ex)
             {
                 Console.WriteLine($"Error selecting product: {ex.Message}");
-                return page; // fallback: stay on the same page
+                return page;
+            }
+        }
+
+        private static async Task IncreaseQuantity(IPage page)
+        {
+            try
+            {
+                var quantityDropdown = await page.QuerySelectorAsync("select[name='quantity']");
+                if (quantityDropdown != null)
+                {
+                    Console.WriteLine("Changing quantity using dropdown...");
+                    await quantityDropdown.SelectOptionAsync("3");
+                    await page.WaitForTimeoutAsync(2000);
+                    Console.WriteLine("Quantity set to 3.");
+                }
+                else
+                {
+                    Console.WriteLine("Quantity dropdown not found. Skipping quantity adjustment.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error adjusting quantity: {ex.Message}");
             }
         }
     }

@@ -432,6 +432,7 @@ C:\Coding\AmazonShoppingAutomation\obj\Debug\net8.0\AmazonShoppingAutomation.Gen
 C:\Coding\AmazonShoppingAutomation\obj\Debug\net8.0\AmazonShoppingAutomation.AssemblyInfoInputs.cache
 C:\Coding\AmazonShoppingAutomation\obj\Debug\net8.0\AmazonShoppingAutomation.AssemblyInfo.cs
 C:\Coding\AmazonShoppingAutomation\obj\Debug\net8.0\AmazonShoppingAutomation.csproj.CoreCompileInputs.cache
+C:\Coding\AmazonShoppingAutomation\obj\Debug\net8.0\AmazonShoppingAutomation.sourcelink.json
 C:\Coding\AmazonShoppingAutomation\obj\Debug\net8.0\AmazonSh.56A6E759.Up2Date
 C:\Coding\AmazonShoppingAutomation\obj\Debug\net8.0\AmazonShoppingAutomation.dll
 C:\Coding\AmazonShoppingAutomation\obj\Debug\net8.0\refint\AmazonShoppingAutomation.dll
